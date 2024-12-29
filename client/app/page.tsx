@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-black/25 to-gray-900 p-4">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-900">
       <div className="flex flex-col gap-4 items-center sm:items-center">
         <Image
           className="dark:invert max-w-xs sm:max-w-sm md:max-w-md"
