@@ -1,6 +1,116 @@
-import { ExpensePieChart } from "@/components/ExpensePieChart";
+import SavingsCard from "@/components/cards/SavingsCard";
+import { ExpensePieChart } from "@/components/Charts/ExpensePieChart";
+import MonthlyExpenseTable from "@/components/Tables/MonthlyExpenseTable";
 
 const ExpensePage = () => {
+  const expenses = [
+    {
+      id: "1",
+      date: "2023-10-01",
+      type: "Food",
+      amount: 50.0,
+      description: "Groceries",
+    },
+    {
+      id: "2",
+      date: "2023-10-02",
+      type: "Transport",
+      amount: 20.0,
+      description: "Bus fare",
+    },
+    {
+      id: "3",
+      date: "2023-10-03",
+      type: "Utilities",
+      amount: 100.0,
+      description: "Electricity bill",
+    },
+    {
+      id: "4",
+      date: "2023-10-04",
+      type: "Entertainment",
+      amount: 75.0,
+      description: "Movie tickets",
+    },
+    {
+      id: "5",
+      date: "2023-10-05",
+      type: "Health",
+      amount: 150.0,
+      description: "Doctor visit",
+    },
+    {
+      id: "6",
+      date: "2023-10-06",
+      type: "Food",
+      amount: 60.0,
+      description: "Dining out",
+    },
+    {
+      id: "7",
+      date: "2023-10-07",
+      type: "Transport",
+      amount: 25.0,
+      description: "Taxi fare",
+    },
+    {
+      id: "8",
+      date: "2023-10-08",
+      type: "Utilities",
+      amount: 110.0,
+      description: "Water bill",
+    },
+    {
+      id: "9",
+      date: "2023-10-09",
+      type: "Entertainment",
+      amount: 80.0,
+      description: "Concert tickets",
+    },
+    {
+      id: "10",
+      date: "2023-10-10",
+      type: "Health",
+      amount: 160.0,
+      description: "Medication",
+    },
+    {
+      id: "11",
+      date: "2023-10-11",
+      type: "Food",
+      amount: 55.0,
+      description: "Groceries",
+    },
+    {
+      id: "12",
+      date: "2023-10-12",
+      type: "Transport",
+      amount: 30.0,
+      description: "Train fare",
+    },
+    {
+      id: "13",
+      date: "2023-10-13",
+      type: "Utilities",
+      amount: 120.0,
+      description: "Gas bill",
+    },
+    {
+      id: "14",
+      date: "2023-10-14",
+      type: "Entertainment",
+      amount: 85.0,
+      description: "Theater tickets",
+    },
+    {
+      id: "15",
+      date: "2023-10-15",
+      type: "Health",
+      amount: 170.0,
+      description: "Dental checkup",
+    },
+  ];
+  console.log(process.env.HOST_URL);
   const month = [
     "January",
     "February",
@@ -34,11 +144,15 @@ const ExpensePage = () => {
         <div className="hover:shadow-lg transform hover:scale-105 transition-transform duration-30">
           <ExpensePieChart month={name} year={year} />
         </div>
-        <div>Something else</div>
+        <div className="hover:shadow-lg transform hover:scale-105 transition-transform duration-30">
+          <SavingsCard />
+        </div>
         <div>something more</div>
       </div>
 
-      <div>Detailed Table</div>
+      <div className="m-6 w-auto">
+        <MonthlyExpenseTable expenses={expenses} />
+      </div>
     </div>
   );
 };

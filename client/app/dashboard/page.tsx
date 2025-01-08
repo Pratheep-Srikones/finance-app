@@ -1,6 +1,6 @@
 "use client";
-import { Chart } from "@/components/ExpenseChart";
-import ExpenseTable from "@/components/ExpenseTable";
+import { Chart } from "@/components/Charts/ExpenseChart";
+import ExpenseTable from "@/components/Tables/RecentExpenseTable";
 import { Expense } from "@/types/types";
 import { notifySuccess } from "@/utils/notify";
 import { useState } from "react";
