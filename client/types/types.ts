@@ -5,3 +5,9 @@ export interface Expense {
   description: string;
   date: string;
 }
+
+export interface User {
+  username: string;
+  email: string;
+  picture_link: string;
+}

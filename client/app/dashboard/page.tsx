@@ -1,8 +1,10 @@
 "use client";
 import { Chart } from "@/components/Charts/ExpenseChart";
 import ExpenseTable from "@/components/Tables/RecentExpenseTable";
+import { addExpense } from "@/services/transaction.services";
 import { Expense } from "@/types/types";
-import { notifySuccess } from "@/utils/notify";
+import { notifyError, notifySuccess } from "@/utils/notify";
+import Link from "next/link";
 import { useState } from "react";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { FaHouseChimneyUser } from "react-icons/fa6";
@@ -33,10 +35,31 @@ const Dashboard = () => {
     { date: "2023-10-14", type: "Entertainment", amount: 85.0 },
     { date: "2023-10-15", type: "Health", amount: 170.0 },
   ];
+  const handleAddExpense = async () => {
+    if (!expense.type || !expense.amount) {
+      notifyError("Please fill all the fields");
+      return;
+    }
 
-  const handleAddExpense = () => {
-    notifySuccess("Expense Added Successfully");
-    setModalOpen(false);
+    try {
+      addExpense(expense)
+        .then(() => {
+          notifySuccess("Expense Added Successfully");
+          setModalOpen(false);
+          setExpense({
+            type: "",
+            amount: 0,
+            description: "",
+            date: "",
+            id: "",
+          });
+        })
+        .catch((error) => {
+          notifyError("Failed to add expense: " + error);
+        });
+    } catch (error) {
+      notifyError("Failed to add expense: " + error);
+    }
   };
   return (
     <div className="flex h-full bg-gray-800 flex-col">
@@ -50,9 +73,11 @@ const Dashboard = () => {
             <span className="text-3xl font-bold text-blue-400 mt-1 block">
               Pratheep.Srikones
             </span>
-            <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">
-              View Profile {">>"}
-            </button>
+            <Link href={"/user"}>
+              <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">
+                View Profile {">>"}
+              </button>
+            </Link>
           </div>
           <FaHouseChimneyUser className="hidden md:flex w-16 h-16 mr-10" />
         </div>
@@ -66,9 +91,11 @@ const Dashboard = () => {
             <span className="text-3xl font-bold text-blue-400 mt-1 block">
               6000 LKR
             </span>
-            <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">
-              More Details
-            </button>
+            <Link href={"/expenses"}>
+              <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">
+                More Details
+              </button>
+            </Link>
           </div>
           <FaMoneyBillTrendUp className="hidden md:flex w-16 h-16 mr-10" />
         </div>
@@ -150,18 +177,6 @@ const Dashboard = () => {
                   setExpense({ ...expense, description: e.target.value })
                 }
               />
-
-              <label className="text-blue-600 my-2 block font-medium">
-                Date:
-              </label>
-              <input
-                type="date"
-                className="w-full border-2 border-gray-600 bg-transparent text-white p-2 rounded-lg focus:outline-none focus:border-blue-500 max-w-[300px]"
-                value={expense.date}
-                onChange={(e) =>
-                  setExpense({ ...expense, date: e.target.value })
-                }
-              />
               <button
                 className="mr-4 bg-gray-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 mt-10 max-w-[200px]"
                 onClick={handleAddExpense}
@@ -170,7 +185,16 @@ const Dashboard = () => {
               </button>
               <button
                 className=" mx-4 bg-gray-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-600 transition duration-300 mt-10 max-w-[200px]"
-                onClick={() => setModalOpen(false)}
+                onClick={() => {
+                  setModalOpen(false);
+                  setExpense({
+                    type: "",
+                    amount: 0,
+                    description: "",
+                    date: "",
+                    id: "",
+                  });
+                }}
               >
                 Cancel
               </button>
