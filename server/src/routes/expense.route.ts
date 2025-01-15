@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { addExpense } from "../controllers/expense.controller";
+import {
+  addExpense,
+  getMonthlyExpensesByUserId,
+} from "../controllers/expense.controller";
 
 const router = Router();
 
 router.post("/", addExpense);
+router.get("/", getMonthlyExpensesByUserId);
 
 export default router;
