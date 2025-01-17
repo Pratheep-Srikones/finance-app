@@ -17,14 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { type: "food", total: 275, fill: "var(--color-food)" },
-  { type: "travel", total: 200, fill: "var(--color-travel)" },
-  { type: "bills", total: 287, fill: "var(--color-bills)" },
-  { type: "rent", total: 173, fill: "var(--color-rent)" },
-  { type: "entertainment", total: 173, fill: "var(--color-entertainment)" },
-  { type: "other", total: 190, fill: "var(--color-other)" },
-];
+import { piechartData } from "@/utils/convert";
+
 const chartConfig = {
   total: {
     label: "Total",
@@ -58,13 +52,19 @@ const chartConfig = {
 export function ExpensePieChart({
   year,
   month,
+  data,
 }: {
   year: number;
   month: string;
+  data: {
+    type: string;
+    total: number;
+  }[];
 }) {
+  const chartData = piechartData(data);
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.total, 0);
-  }, []);
+  }, [chartData]);
 
   return (
     <Card className="flex flex-col  bg-gray-950/60">

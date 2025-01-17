@@ -298,25 +298,25 @@ const Dashboard = () => {
                 <option value="" disabled className="text-white bg-gray-800">
                   Select a category
                 </option>
-                <option value="Food" className="text-white bg-gray-800">
+                <option value="food" className="text-white bg-gray-800">
                   Food
                 </option>
-                <option value="Travel" className="text-white bg-gray-800">
+                <option value="travel" className="text-white bg-gray-800">
                   Travel
                 </option>
-                <option value="Rent" className="text-white bg-gray-800">
+                <option value="rent" className="text-white bg-gray-800">
                   Rent
                 </option>
-                <option value="Bills" className="text-white bg-gray-800">
+                <option value="bills" className="text-white bg-gray-800">
                   Bills
                 </option>
                 <option
-                  value="Entertainment"
+                  value="entertainment"
                   className="text-white bg-gray-800"
                 >
                   Entertainment
                 </option>
-                <option value="Other" className="text-white bg-gray-800">
+                <option value="other" className="text-white bg-gray-800">
                   {" "}
                   Other
                 </option>

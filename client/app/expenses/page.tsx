@@ -3,7 +3,10 @@ import SavingsCard from "@/components/cards/SavingsCard";
 import { ExpensePieChart } from "@/components/Charts/ExpensePieChart";
 import MonthlyExpenseTable from "@/components/Tables/MonthlyExpenseTable";
 import { month, months, user_id, year } from "@/data/data";
-import { getMonthlyExpensesByUserId } from "@/services/expense.services";
+import {
+  getMonthlyExpensesByUserId,
+  getTotalExpenseByType,
+} from "@/services/expense.services";
 import { Expense } from "@/types/types";
 import { useEffect, useState } from "react";
 
@@ -34,6 +37,26 @@ const ExpensePage = () => {
   const monthStr = months[m];
   const yearStr = d.getFullYear();
 
+  const [typeTotals, setTypeTotals] = useState<
+    { type: string; total: number }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchTypeTotals = async () => {
+      try {
+        const data = await getTotalExpenseByType(user_id!, month, year);
+        setTypeTotals(data);
+      } catch (error) {
+        console.error("Error fetching type totals:", error);
+      }
+    };
+    try {
+      fetchTypeTotals();
+    } catch (error) {
+      console.error("Error fetching type totals:", error);
+    }
+  }, []);
+
   return (
     <div className="flex h-full bg-gray-800 flex-col">
       <div className="m-6">
@@ -45,10 +68,10 @@ const ExpensePage = () => {
       </div>
       <div className="m-6 flex flex-col items-center justify-center md:flex-row gap-2 md:gap-6">
         <div className="hover:shadow-lg transform hover:scale-105 transition-transform duration-30">
-          <ExpensePieChart month={monthStr} year={yearStr} />
+          <ExpensePieChart month={monthStr} year={yearStr} data={typeTotals} />
         </div>
         <div className="hover:shadow-lg transform hover:scale-105 transition-transform duration-30">
-          <SavingsCard />
+          <SavingsCard data={typeTotals} />
         </div>
         <div>something more</div>
       </div>

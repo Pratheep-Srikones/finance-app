@@ -25,3 +25,15 @@ export const formatToReadableDate = (dateStr: string) => {
 
   return date.toLocaleString("en-US", options);
 };
+
+export const piechartData = (data: { type: string; total: number }[]) => {
+  const chartData: { type: string; total: number; fill: string }[] = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const type = data[i].type;
+    const total = data[i].total;
+    const fill = `var(--color-${type})`;
+    chartData.push({ type, total, fill });
+  }
+  return chartData;
+};
