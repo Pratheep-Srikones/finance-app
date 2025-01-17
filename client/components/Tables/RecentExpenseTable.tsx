@@ -7,12 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Expense } from "@/types/types";
 
-const ExpenseTable = ({
-  expenses,
-}: {
-  expenses: { date: string; type: string; amount: number }[];
-}) => {
+const ExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
   return (
     <Table>
       <TableCaption>Latest Expenses</TableCaption>
@@ -25,8 +22,10 @@ const ExpenseTable = ({
       </TableHeader>
       <TableBody>
         {expenses.map((expense) => (
-          <TableRow key={expense.date}>
-            <TableCell className="text-blue-200">{expense.date}</TableCell>
+          <TableRow key={expense.happened_at}>
+            <TableCell className="text-blue-200">
+              {new Date(expense.happened_at).toLocaleDateString()}
+            </TableCell>
             <TableCell className="text-blue-200">{expense.type}</TableCell>
             <TableCell className="text-right text-blue-200">
               {expense.amount}/=

@@ -1,11 +1,17 @@
 "use client";
 import { Chart } from "@/components/Charts/ExpenseChart";
 import ExpenseTable from "@/components/Tables/RecentExpenseTable";
-import { addExpense } from "@/services/transaction.services";
+import { user_id, year, month } from "@/data/data";
+import {
+  addExpense,
+  getLatestExpenseByUserId,
+  getTotalExpenseByMonth,
+} from "@/services/expense.services";
 import { Expense } from "@/types/types";
+import { convertMonthData } from "@/utils/convert";
 import { notifyError, notifySuccess } from "@/utils/notify";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { FaHouseChimneyUser } from "react-icons/fa6";
 import { ToastContainer } from "react-toastify";
@@ -15,26 +21,170 @@ const Dashboard = () => {
     type: "",
     amount: 0,
     description: "",
-    date: "",
-    id: "",
+    happened_at: "",
+    expense_id: "",
+    user_id: "",
   });
-  const expenses = [
-    { date: "2023-10-01", type: "Food", amount: 50.0 },
-    { date: "2023-10-02", type: "Transport", amount: 20.0 },
-    { date: "2023-10-03", type: "Utilities", amount: 100.0 },
-    { date: "2023-10-04", type: "Entertainment", amount: 75.0 },
-    { date: "2023-10-05", type: "Health", amount: 150.0 },
-    { date: "2023-10-06", type: "Food", amount: 60.0 },
-    { date: "2023-10-07", type: "Transport", amount: 25.0 },
-    { date: "2023-10-08", type: "Utilities", amount: 110.0 },
-    { date: "2023-10-09", type: "Entertainment", amount: 80.0 },
-    { date: "2023-10-10", type: "Health", amount: 160.0 },
-    { date: "2023-10-11", type: "Food", amount: 55.0 },
-    { date: "2023-10-12", type: "Transport", amount: 30.0 },
-    { date: "2023-10-13", type: "Utilities", amount: 120.0 },
-    { date: "2023-10-14", type: "Entertainment", amount: 85.0 },
-    { date: "2023-10-15", type: "Health", amount: 170.0 },
-  ];
+  // const expenses = [
+  //   {
+  //     expense_id: "1",
+  //     happened_at: "2023-10-01",
+  //     type: "Food",
+  //     amount: 50.0,
+  //     description: "Groceries",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "2",
+  //     happened_at: "2023-10-02",
+  //     type: "Transport",
+  //     amount: 20.0,
+  //     description: "Bus fare",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "3",
+  //     happened_at: "2023-10-03",
+  //     type: "Utilities",
+  //     amount: 100.0,
+  //     description: "Electricity bill",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "4",
+  //     happened_at: "2023-10-04",
+  //     type: "Entertainment",
+  //     amount: 75.0,
+  //     description: "Movie tickets",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "5",
+  //     happened_at: "2023-10-05",
+  //     type: "Health",
+  //     amount: 150.0,
+  //     description: "Doctor visit",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "6",
+  //     happened_at: "2023-10-06",
+  //     type: "Food",
+  //     amount: 60.0,
+  //     description: "Dining out",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "7",
+  //     happened_at: "2023-10-07",
+  //     type: "Transport",
+  //     amount: 25.0,
+  //     description: "Taxi fare",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "8",
+  //     happened_at: "2023-10-08",
+  //     type: "Utilities",
+  //     amount: 110.0,
+  //     description: "Water bill",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "9",
+  //     happened_at: "2023-10-09",
+  //     type: "Entertainment",
+  //     amount: 80.0,
+  //     description: "Concert tickets",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "10",
+  //     happened_at: "2023-10-10",
+  //     type: "Health",
+  //     amount: 160.0,
+  //     description: "Medication",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "11",
+  //     happened_at: "2023-10-11",
+  //     type: "Food",
+  //     amount: 55.0,
+  //     description: "Groceries",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "12",
+  //     happened_at: "2023-10-12",
+  //     type: "Transport",
+  //     amount: 30.0,
+  //     description: "Train fare",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "13",
+  //     happened_at: "2023-10-13",
+  //     type: "Utilities",
+  //     amount: 120.0,
+  //     description: "Gas bill",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "14",
+  //     happened_at: "2023-10-14",
+  //     type: "Entertainment",
+  //     amount: 85.0,
+  //     description: "Theater tickets",
+  //     user_id: "2",
+  //   },
+  //   {
+  //     expense_id: "15",
+  //     happened_at: "2023-10-15",
+  //     type: "Health",
+  //     amount: 170.0,
+  //     description: "Dental checkup",
+  //     user_id: "2",
+  //   },
+  // ];
+
+  const [monthTotals, setMonthTotals] = useState<
+    { month: number; total: number }[]
+  >([]);
+  useEffect(() => {
+    const fetchMonthTotalsData = async () => {
+      try {
+        const monthTotalData = await getTotalExpenseByMonth(user_id!, year);
+        setMonthTotals(monthTotalData);
+      } catch (error) {
+        console.error("Error fetching month totals:", error);
+      }
+    };
+    try {
+      fetchMonthTotalsData();
+    } catch (error) {
+      console.error("Error fetching expenses:", error);
+    }
+  }, []);
+  const chartData = convertMonthData(monthTotals);
+
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const expenses = await getLatestExpenseByUserId(user_id!);
+        setExpenses(expenses);
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+      }
+    };
+    try {
+      fetchExpenses();
+    } catch (error) {
+      console.error("Error fetching expenses:", error);
+    }
+  }, []);
+
   const handleAddExpense = async () => {
     if (!expense.type || !expense.amount) {
       notifyError("Please fill all the fields");
@@ -50,8 +200,9 @@ const Dashboard = () => {
             type: "",
             amount: 0,
             description: "",
-            date: "",
-            id: "",
+            happened_at: "",
+            expense_id: "",
+            user_id: "",
           });
         })
         .catch((error) => {
@@ -89,7 +240,7 @@ const Dashboard = () => {
               Amount Spent this Month:
             </span>
             <span className="text-3xl font-bold text-blue-400 mt-1 block">
-              6000 LKR
+              {monthTotals.length > 0 ? monthTotals[month - 1].total : 0} LKR
             </span>
             <Link href={"/expenses"}>
               <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">
@@ -108,7 +259,7 @@ const Dashboard = () => {
             Monthly Expenses
           </h1>
           <span className="bg-blue-500 h-[10px] w-16 sm:w-20 lg:w-24 block mb-3 md:mb-6 rounded-2xl"></span>
-          <Chart />
+          <Chart data={chartData} />
         </div>
 
         {/* Recent Transactions Section */}
@@ -137,23 +288,39 @@ const Dashboard = () => {
               <label className="text-blue-600 mb-2 block font-medium">
                 Type:
               </label>
-              <input
-                type="text"
+              <select
                 className="w-full border-b-2 border-gray-600 bg-transparent text-white p-2 focus:outline-none focus:border-blue-500 max-w-[300px]"
-                list="preset-options"
-                placeholder="Select or type a category"
                 value={expense.type}
                 onChange={(e) =>
                   setExpense({ ...expense, type: e.target.value })
                 }
-              />
-              <datalist id="preset-options">
-                <option value="Food" />
-                <option value="Travel" />
-                <option value="Rent" />
-                <option value="Bills (Electricity, Water, Mobile)" />
-                <option value="Entertainment" />
-              </datalist>
+              >
+                <option value="" disabled className="text-white bg-gray-800">
+                  Select a category
+                </option>
+                <option value="Food" className="text-white bg-gray-800">
+                  Food
+                </option>
+                <option value="Travel" className="text-white bg-gray-800">
+                  Travel
+                </option>
+                <option value="Rent" className="text-white bg-gray-800">
+                  Rent
+                </option>
+                <option value="Bills" className="text-white bg-gray-800">
+                  Bills
+                </option>
+                <option
+                  value="Entertainment"
+                  className="text-white bg-gray-800"
+                >
+                  Entertainment
+                </option>
+                <option value="Other" className="text-white bg-gray-800">
+                  {" "}
+                  Other
+                </option>
+              </select>
 
               <label className="text-blue-600 my-2 block font-medium">
                 Amount:
@@ -191,8 +358,9 @@ const Dashboard = () => {
                     type: "",
                     amount: 0,
                     description: "",
-                    date: "",
-                    id: "",
+                    happened_at: "",
+                    expense_id: "",
+                    user_id: "",
                   });
                 }}
               >

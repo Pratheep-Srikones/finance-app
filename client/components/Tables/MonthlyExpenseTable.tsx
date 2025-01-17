@@ -1,5 +1,6 @@
 "use client";
 import { Expense } from "@/types/types";
+import { formatToReadableDate } from "@/utils/convert";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 
@@ -9,24 +10,32 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const [currExpense, setCurrExpense] = useState<Expense>({
-    id: "",
-    date: "",
+    expense_id: "",
+    happened_at: "",
     type: "",
     amount: 0,
     description: "",
+    user_id: "",
   });
 
   const handleEditModalOpen = (id: string) => {
     console.log(id);
-    setCurrExpense(expenses.find((expense) => expense.id === id)!);
+    setCurrExpense(expenses.find((expense) => expense.expense_id === id)!);
     setAction("Edit");
     setModalOpen(true);
   };
 
   const handleDeleteModalOpen = (id: string) => {
     console.log(id);
-    setCurrExpense(expenses.find((expense) => expense.id === id)!);
+    setCurrExpense(expenses.find((expense) => expense.expense_id === id)!);
     setAction("Delete");
+    setModalOpen(true);
+  };
+
+  const handleViewModalOpen = (id: string) => {
+    console.log(id);
+    setCurrExpense(expenses.find((expense) => expense.expense_id === id)!);
+    setAction("View");
     setModalOpen(true);
   };
 
@@ -64,7 +73,7 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
                         className="border-b border-[#eee] py-5 px-4 pl-9 xl:pl-11"
                       >
                         <p className="text-white">
-                          {new Date(expense.date).toLocaleDateString()}
+                          {formatToReadableDate(expense.happened_at)}
                         </p>
                       </td>
                       <td rowSpan={1} className="border-black/40 py-5 px-4">
@@ -81,7 +90,36 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
                       <td className="border-b border-[#eee] py-5 px-4">
                         <div className="flex items-center justify-center space-x-3.5">
                           <button
-                            onClick={() => handleEditModalOpen(expense.id)}
+                            onClick={() =>
+                              handleViewModalOpen(expense.expense_id)
+                            }
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                                stroke="white"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                stroke="white"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleEditModalOpen(expense.expense_id)
+                            }
                             className="hover:text-blue-600"
                           >
                             <svg
@@ -100,7 +138,9 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
                             </svg>
                           </button>
                           <button
-                            onClick={() => handleDeleteModalOpen(expense.id)}
+                            onClick={() =>
+                              handleDeleteModalOpen(expense.expense_id)
+                            }
                             className="hover:text-blue-600"
                           >
                             <svg
@@ -147,8 +187,9 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
           <h3 className="text-xl font-bold text-white dark:text-white sm:text-2xl">
             {
               {
-                Edit: `Edit Transaction`,
-                Delete: "Delete Transaction",
+                Edit: `Edit Expense`,
+                Delete: "Delete Expense",
+                View: " Expense Details",
               }[action]
             }
           </h3>
@@ -158,7 +199,7 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
               <div className="mb-4 text-white">
                 Confirm to delete Transaction: {currExpense.type} of amount{" "}
                 {currExpense.amount} on{" "}
-                {new Date(currExpense.date).toLocaleDateString()}
+                {new Date(currExpense.happened_at).toLocaleDateString()}
               </div>
               <div className="m-3 flex flex-row gap-y-4">
                 <div className="w-full px-3 2xsm:w-1/2">
@@ -231,9 +272,12 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
                   </label>
                   <input
                     type="date"
-                    value={currExpense.date}
+                    value={currExpense.happened_at}
                     onChange={(e) =>
-                      setCurrExpense({ ...currExpense, date: e.target.value })
+                      setCurrExpense({
+                        ...currExpense,
+                        happened_at: e.target.value,
+                      })
                     }
                     placeholder="Enter Date"
                     className="w-full border-2 border-gray-600 bg-transparent text-white p-2 rounded-lg focus:outline-none focus:border-blue-500 max-w-[300px]"
@@ -275,6 +319,40 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
                 </div>
               </div>
             </>
+          )}
+
+          {action === "View" && (
+            <div className=" gap-4">
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <h1 className="text-gray-400 font-semibold">Type:</h1>
+                  <p className="text-white">{currExpense.type}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <h1 className="text-gray-400 font-semibold">Amount:</h1>
+                  <p className="text-white">{currExpense.amount}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <h1 className="text-gray-400 font-semibold">Date:</h1>
+                  <p className="text-white">{currExpense.happened_at}</p>
+                </div>
+
+                <div>
+                  <h1 className="text-gray-400 font-semibold mb-1">
+                    Description:
+                  </h1>
+                  <p className="text-white">{currExpense.description}</p>
+                </div>
+                <button
+                  onClick={() => setModalOpen(false)}
+                  className="block w-full rounded-lg  bg-gray-600 p-3 text-center font-medium text-white transition hover:border-red-600 hover:bg-red-600"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
