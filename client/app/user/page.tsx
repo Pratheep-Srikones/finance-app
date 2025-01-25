@@ -1,15 +1,21 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { User } from "@/types/types";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ProfilePage = () => {
+  const router = useRouter();
+  if (!localStorage.getItem("user_id")) {
+    router.push("/auth");
+  }
   const [currUser, setCurrUser] = useState<User>({
-    username: "John Doe",
-    email: "johndoe@gmail.com",
+    username: localStorage.getItem("username") || "Username not found",
+    email: localStorage.getItem("email") || "Email not found",
     picture_link:
-      "https://images.unsplash.com/photo-1727891521863-ba8c598bad4e?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      localStorage.getItem("picture_link") ||
+      "https://www.gravatar.com/avatar/",
   });
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,12 +36,12 @@ const ProfilePage = () => {
 
   const handleLogOut = () => {
     localStorage.clear();
+    router.push("/auth");
   };
   return (
     <div className="flex h-screen bg-gray-800 flex-col items-center justify-center p-6">
       <div className="flex p-4 gap-6 flex-col md:flex-row bg-gray-700/30 m-4 border border-gray-600 rounded-xl items-center md:items-start shadow-md w-full max-w-4xl">
-        {/* Profile Image */}
-        <Image
+        <img
           src={currUser.picture_link}
           alt="Profile Image"
           width={128}

@@ -38,3 +38,24 @@ export const signup = async (
     throw error;
   }
 };
+
+export const login = async (username: string, password: string) => {
+  if (username && password) {
+    try {
+      const response = await axiosInstance.post("/auth/login", {
+        username,
+        password,
+      });
+      const token = response.data.token;
+      const user = response.data.user;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_id", user.id);
+      localStorage.setItem("username", user.username);
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("picture_link", user.picture_link);
+    } catch (error) {
+      throw error;
+    }
+  }
+};

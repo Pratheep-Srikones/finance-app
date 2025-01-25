@@ -4,9 +4,14 @@ import BorderButton from "@/components/ui/border-button";
 import { notifyError, notifySuccess } from "../../utils/notify";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
-import { signup, uploadImage } from "@/services/auth.services";
+import { login, signup, uploadImage } from "@/services/auth.services";
+import { useRouter } from "next/navigation";
 
 const AuthPage = () => {
+  const router = useRouter();
+  if (localStorage.getItem("user_id")) {
+    router.push("/dashboard");
+  }
   const [mode, setMode] = useState<string>("login");
 
   const handleModeChange = (mode: string) => {
@@ -24,7 +29,22 @@ const AuthPage = () => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const handleLogin = () => {
-    notifySuccess("Login Successful");
+    if (!username) {
+      notifyError("Username is required");
+      return;
+    }
+    if (!password) {
+      notifyError("Password is required");
+      return;
+    }
+    login(username, password)
+      .then(() => {
+        notifySuccess("Login Successful");
+        router.push("/dashboard");
+      })
+      .catch((err) => {
+        notifyError("Login Failed: " + err.response.data.error.error.message);
+      });
   };
 
   const handleSignup = () => {

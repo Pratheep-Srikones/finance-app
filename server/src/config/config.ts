@@ -11,6 +11,7 @@ const {
   CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET,
+  JWT_SECRET,
 } = process.env;
 
 // validate the required configuration information
@@ -30,6 +31,8 @@ assert(
   "CLOUDINARY_API_SECRET configuration is required."
 );
 
+assert(JWT_SECRET, "JWT_SECRET configuration is required.");
+
 export default {
   port: PORT,
   hostUrl: HOST_URL,
@@ -38,4 +41,5 @@ export default {
   cloudName: CLOUDINARY_CLOUD_NAME,
   cloudAPI: CLOUDINARY_API_KEY,
   cloudApiSecret: CLOUDINARY_API_SECRET,
+  jwtSecret: JWT_SECRET,
 };

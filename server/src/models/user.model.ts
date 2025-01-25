@@ -12,6 +12,21 @@ export const getAllUsersModel = async () => {
   }
 };
 
+export const getUserbyUsernameModal = async (username: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("username", username);
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error fetching users:", (error as Error).message);
+    throw { data: null, error, message: "Database Query Failed" };
+  }
+};
+
 export const addUserModel = async (
   username: string,
   email: string,

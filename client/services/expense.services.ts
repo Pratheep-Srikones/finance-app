@@ -44,7 +44,7 @@ export const getLatestExpenseByUserId = async (user_id: string) => {
 
 export const deleteExpenseById = async (expense_id: string) => {
   try {
-    const response = await axiosInstance.delete("/expense", {
+    const response = await axiosInstance.delete("/expenses", {
       params: { expense_id },
     });
 

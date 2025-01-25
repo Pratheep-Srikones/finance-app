@@ -1,6 +1,8 @@
 "use client";
+import { deleteExpenseById, updateExpense } from "@/services/expense.services";
 import { Expense } from "@/types/types";
 import { formatToReadableDate } from "@/utils/convert";
+import { notifyError, notifySuccess } from "@/utils/notify";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 
@@ -39,7 +41,32 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
     setModalOpen(true);
   };
 
-  const handleModalSubmit = () => {};
+  const handleModalSubmit = () => {
+    if (action === "Edit") {
+      updateExpense(currExpense)
+        .then((res) => {
+          notifySuccess("Updated Successfully!");
+          console.log(res);
+        })
+        .catch((err) => {
+          notifyError(
+            "Error editing: " + err.response.data.error.error.message
+          );
+        });
+    }
+    if (action === "Delete") {
+      deleteExpenseById(currExpense.expense_id)
+        .then((res) => {
+          notifySuccess("Updated Successfully!");
+          console.log(res);
+        })
+        .catch((err) => {
+          notifyError(
+            "Error editing: " + err.response.data.error.error.message
+          );
+        });
+    }
+  };
 
   return (
     <div className="rounded-sm border border-stroke bg-gray-900/80 px-5 pt-6 pb-2.5 shadow-default sm:px-7.5 xl:pb-1">

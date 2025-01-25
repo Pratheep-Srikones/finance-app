@@ -11,11 +11,16 @@ import { Expense } from "@/types/types";
 import { convertMonthData } from "@/utils/convert";
 import { notifyError, notifySuccess } from "@/utils/notify";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { FaHouseChimneyUser } from "react-icons/fa6";
 import { ToastContainer } from "react-toastify";
 const Dashboard = () => {
+  const router = useRouter();
+  if (!localStorage.getItem("user_id")) {
+    router.push("/auth");
+  }
   const [modalOpen, setModalOpen] = useState(false);
   const [expense, setExpense] = useState<Expense>({
     type: "",
@@ -213,7 +218,7 @@ const Dashboard = () => {
     }
   };
   return (
-    <div className="flex h-full bg-gray-800 flex-col">
+    <div className="flex bg-gray-800 flex-col h-screen">
       <div className="flex w-full p-4 gap-2 flex-col md:flex-row">
         {/* Card 1 */}
         <div className="bg-blue-800/25 text-white text-lg font-semibold rounded-2xl w-full h-[150px] flex justify-between items-center p-4 shadow-lg">
@@ -222,7 +227,7 @@ const Dashboard = () => {
               Welcome
             </span>
             <span className="text-3xl font-bold text-blue-400 mt-1 block">
-              Pratheep.Srikones
+              {localStorage.getItem("username")}{" "}
             </span>
             <Link href={"/user"}>
               <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">
