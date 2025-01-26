@@ -8,8 +8,8 @@ export default function Home() {
       <div className="flex flex-col gap-4 items-center sm:items-center">
         <Image
           className="dark:invert max-w-xs sm:max-w-sm md:max-w-md"
-          src="/SPENDWISE.svg"
-          alt="SpendWise Logo"
+          src="/EXPENSIO.svg"
+          alt="Expensio Logo"
           width={500}
           height={500}
           priority

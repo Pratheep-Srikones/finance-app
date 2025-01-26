@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SpendWise",
+  title: "Expensio",
   description: "Simplify the finance management process",
 };
 
