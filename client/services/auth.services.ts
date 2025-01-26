@@ -59,3 +59,22 @@ export const login = async (username: string, password: string) => {
     }
   }
 };
+
+export const changePassword = async (
+  old_password: string,
+  new_password: string
+) => {
+  if (old_password && new_password) {
+    try {
+      const response = await axiosInstance.post("/auth/password", {
+        username: localStorage.getItem("username"),
+        old_password,
+        new_password,
+      });
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+};

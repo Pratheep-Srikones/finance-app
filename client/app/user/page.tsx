@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { changePassword } from "@/services/auth.services";
 import { User } from "@/types/types";
+import { notifyError, notifySuccess } from "@/utils/notify";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -37,6 +40,31 @@ const ProfilePage = () => {
   const handleLogOut = () => {
     localStorage.clear();
     router.push("/auth");
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      notifyError("Passwords do not match");
+      return;
+    }
+    try {
+      changePassword(oldPassword, newPassword)
+        .then((res) => {
+          if (res) {
+            notifySuccess("Password changed successfully");
+            setModalOpen(false);
+            setNewPassword("");
+            setOldPassword("");
+            setConfirmPassword("");
+          }
+        })
+        .catch((error) => {
+          notifyError("Error changing password: " + error.response.data.error);
+          //console.error("Error changing password:", error);
+        });
+    } catch (error) {
+      notifyError("Error changing password: " + error);
+    }
   };
   return (
     <div className="flex h-screen bg-gray-800 flex-col items-center justify-center p-6">
@@ -139,7 +167,7 @@ const ProfilePage = () => {
           {action === "changePW" && (
             <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md mx-auto">
               <h1 className="text-2xl font-bold text-white mb-6 text-center md:text-left">
-                Cahnge Password
+                Change Password
               </h1>
 
               <div className="mb-4">
@@ -147,9 +175,9 @@ const ProfilePage = () => {
                 <input
                   type="password"
                   className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={newPassword}
+                  value={oldPassword}
                   onChange={(e) => {
-                    setNewPassword(e.target.value);
+                    setOldPassword(e.target.value);
                   }}
                 />
               </div>
@@ -158,9 +186,9 @@ const ProfilePage = () => {
                 <input
                   type="password"
                   className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={oldPassword}
+                  value={newPassword}
                   onChange={(e) => {
-                    setOldPassword(e.target.value);
+                    setNewPassword(e.target.value);
                   }}
                 />
               </div>
@@ -180,13 +208,21 @@ const ProfilePage = () => {
 
               {/* Buttons */}
               <div className="flex flex-col md:flex-row gap-4 mt-6">
-                <button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition">
+                <button
+                  className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"
+                  onClick={() => {
+                    handleChangePassword();
+                  }}
+                >
                   Submit
                 </button>
                 <button
                   className="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-md transition"
                   onClick={() => {
                     setModalOpen(false);
+                    setNewPassword("");
+                    setOldPassword("");
+                    setConfirmPassword("");
                   }}
                 >
                   Cancel
@@ -196,6 +232,7 @@ const ProfilePage = () => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

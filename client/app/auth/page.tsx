@@ -2,16 +2,18 @@
 
 import BorderButton from "@/components/ui/border-button";
 import { notifyError, notifySuccess } from "../../utils/notify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { login, signup, uploadImage } from "@/services/auth.services";
 import { useRouter } from "next/navigation";
 
 const AuthPage = () => {
   const router = useRouter();
-  if (localStorage.getItem("user_id")) {
-    router.push("/dashboard");
-  }
+  useEffect(() => {
+    if (localStorage.getItem("user_id")) {
+      router.push("/dashboard");
+    }
+  }, [router]);
   const [mode, setMode] = useState<string>("login");
 
   const handleModeChange = (mode: string) => {
