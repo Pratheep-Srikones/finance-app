@@ -8,11 +8,11 @@ import {
   getTotalExpenseByType,
 } from "@/services/expense.services";
 import { Expense } from "@/types/types";
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ExpensePage = () => {
-  const router = useRouter();
+  //const router = useRouter();
   
   const [expenses, setExpenses] = useState<Expense[]>([]);
   useEffect(() => {
