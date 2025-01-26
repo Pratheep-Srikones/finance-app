@@ -8,12 +8,16 @@ import {
   getTotalExpenseByType,
 } from "@/services/expense.services";
 import { Expense } from "@/types/types";
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ExpensePage = () => {
-  //const router = useRouter();
-  
+  const router = useRouter();
+  useEffect(() => {
+    if (!localStorage.getItem("user_id")) {
+      router.push("/auth");
+    }
+  }, []);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   useEffect(() => {
     const fetchExpenses = async () => {
