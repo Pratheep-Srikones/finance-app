@@ -5,14 +5,16 @@ import { changePassword } from "@/services/auth.services";
 import { User } from "@/types/types";
 import { notifyError, notifySuccess } from "@/utils/notify";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
 const ProfilePage = () => {
   const router = useRouter();
-  if (!localStorage.getItem("user_id")) {
-    router.push("/auth");
-  }
+  useEffect(() => {
+    if (!localStorage.getItem("user_id")) {
+      router.push("/auth");
+    }
+  }, []);
   const [currUser, setCurrUser] = useState<User>({
     username: localStorage.getItem("username") || "Username not found",
     email: localStorage.getItem("email") || "Email not found",

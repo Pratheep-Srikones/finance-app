@@ -18,9 +18,12 @@ import { FaHouseChimneyUser } from "react-icons/fa6";
 import { ToastContainer } from "react-toastify";
 const Dashboard = () => {
   const router = useRouter();
-  if (!localStorage.getItem("user_id")) {
-    router.push("/auth");
-  }
+  useEffect(() => {
+    if (!localStorage.getItem("user_id")) {
+      router.push("/auth");
+    }
+    setUsername(localStorage.getItem("username") || "");
+  }, []);
   const [modalOpen, setModalOpen] = useState(false);
   const [expense, setExpense] = useState<Expense>({
     type: "",
@@ -30,128 +33,8 @@ const Dashboard = () => {
     expense_id: "",
     user_id: "",
   });
-  // const expenses = [
-  //   {
-  //     expense_id: "1",
-  //     happened_at: "2023-10-01",
-  //     type: "Food",
-  //     amount: 50.0,
-  //     description: "Groceries",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "2",
-  //     happened_at: "2023-10-02",
-  //     type: "Transport",
-  //     amount: 20.0,
-  //     description: "Bus fare",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "3",
-  //     happened_at: "2023-10-03",
-  //     type: "Utilities",
-  //     amount: 100.0,
-  //     description: "Electricity bill",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "4",
-  //     happened_at: "2023-10-04",
-  //     type: "Entertainment",
-  //     amount: 75.0,
-  //     description: "Movie tickets",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "5",
-  //     happened_at: "2023-10-05",
-  //     type: "Health",
-  //     amount: 150.0,
-  //     description: "Doctor visit",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "6",
-  //     happened_at: "2023-10-06",
-  //     type: "Food",
-  //     amount: 60.0,
-  //     description: "Dining out",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "7",
-  //     happened_at: "2023-10-07",
-  //     type: "Transport",
-  //     amount: 25.0,
-  //     description: "Taxi fare",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "8",
-  //     happened_at: "2023-10-08",
-  //     type: "Utilities",
-  //     amount: 110.0,
-  //     description: "Water bill",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "9",
-  //     happened_at: "2023-10-09",
-  //     type: "Entertainment",
-  //     amount: 80.0,
-  //     description: "Concert tickets",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "10",
-  //     happened_at: "2023-10-10",
-  //     type: "Health",
-  //     amount: 160.0,
-  //     description: "Medication",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "11",
-  //     happened_at: "2023-10-11",
-  //     type: "Food",
-  //     amount: 55.0,
-  //     description: "Groceries",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "12",
-  //     happened_at: "2023-10-12",
-  //     type: "Transport",
-  //     amount: 30.0,
-  //     description: "Train fare",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "13",
-  //     happened_at: "2023-10-13",
-  //     type: "Utilities",
-  //     amount: 120.0,
-  //     description: "Gas bill",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "14",
-  //     happened_at: "2023-10-14",
-  //     type: "Entertainment",
-  //     amount: 85.0,
-  //     description: "Theater tickets",
-  //     user_id: "2",
-  //   },
-  //   {
-  //     expense_id: "15",
-  //     happened_at: "2023-10-15",
-  //     type: "Health",
-  //     amount: 170.0,
-  //     description: "Dental checkup",
-  //     user_id: "2",
-  //   },
-  // ];
+
+  const [username, setUsername] = useState("");
 
   const [monthTotals, setMonthTotals] = useState<
     { month: number; total: number }[]
@@ -227,7 +110,7 @@ const Dashboard = () => {
               Welcome
             </span>
             <span className="text-3xl font-bold text-blue-400 mt-1 block">
-              {localStorage.getItem("username")}{" "}
+              {username}{" "}
             </span>
             <Link href={"/user"}>
               <button className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-950 transition duration-300 mt-3">

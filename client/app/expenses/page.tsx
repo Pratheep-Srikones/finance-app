@@ -13,9 +13,11 @@ import { useEffect, useState } from "react";
 
 const ExpensePage = () => {
   const router = useRouter();
-  if (!localStorage.getItem("user_id")) {
-    router.push("/auth");
-  }
+  useEffect(() => {
+    if (!localStorage.getItem("user_id")) {
+      router.push("/auth");
+    }
+  }, []);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   useEffect(() => {
     const fetchExpenses = async () => {
