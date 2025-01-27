@@ -21,21 +21,21 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
   });
 
   const handleEditModalOpen = (id: string) => {
-    console.log(id);
+    //console.log(id);
     setCurrExpense(expenses.find((expense) => expense.expense_id === id)!);
     setAction("Edit");
     setModalOpen(true);
   };
 
   const handleDeleteModalOpen = (id: string) => {
-    console.log(id);
+    // console.log(id);
     setCurrExpense(expenses.find((expense) => expense.expense_id === id)!);
     setAction("Delete");
     setModalOpen(true);
   };
 
   const handleViewModalOpen = (id: string) => {
-    console.log(id);
+    //console.log(id);
     setCurrExpense(expenses.find((expense) => expense.expense_id === id)!);
     setAction("View");
     setModalOpen(true);
@@ -44,9 +44,9 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
   const handleModalSubmit = () => {
     if (action === "Edit") {
       updateExpense(currExpense)
-        .then((res) => {
+        .then(() => {
           notifySuccess("Updated Successfully!");
-          console.log(res);
+          //console.log(res);
         })
         .catch((err) => {
           notifyError("Error editing: " + err);
@@ -54,9 +54,9 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
     }
     if (action === "Delete") {
       deleteExpenseById(currExpense.expense_id)
-        .then((res) => {
+        .then(() => {
           notifySuccess("Updated Successfully!");
-          console.log(res);
+          //console.log(res);
         })
         .catch((err) => {
           notifyError(

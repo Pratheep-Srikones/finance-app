@@ -30,7 +30,7 @@ export const getMonthlyExpensesByUserId = async (
 ) => {
   //console.log("got request");
 
-  console.log(req.query);
+  //console.log(req.query);
   const user_id = req.query.user_id as string;
   const month = req.query.month as unknown as number;
   const year = req.query.year as unknown as number;

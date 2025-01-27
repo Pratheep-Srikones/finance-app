@@ -4,7 +4,7 @@ export const getAllUsersModel = async () => {
     const { data, error } = await supabase.from("users").select("*");
 
     if (error) throw error;
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     console.error("Error fetching users:", (error as Error).message);
@@ -50,7 +50,7 @@ export const addUserModel = async (
       .insert([{ username, email, password, picture_link }]);
 
     if (error) throw error;
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     console.error("Error adding user:", (error as Error).message);

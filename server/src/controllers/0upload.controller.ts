@@ -17,7 +17,7 @@ export const cloudUpload = async (req: Request, res: Response) => {
       });
     }
 
-    console.log("file uploaded to cloudinary: ", result);
+    //console.log("file uploaded to cloudinary: ", result);
 
     res.status(200).json({
       message: "file uploaded to cloudinary",

@@ -26,7 +26,7 @@ export const login = async (req: Request, res: Response) => {
 
   if (Array.isArray(result) && result.length > 0) {
     const user = result[0];
-    console.log("user: ", user);
+    //console.log("user: ", user);
     if (comparePassword(password, user.password)) {
       const token = generateJwtToken({
         user_id: user.id,
