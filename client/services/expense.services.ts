@@ -59,7 +59,7 @@ export const updateExpense = async (expense: Expense) => {
     throw new Error("Expense ID is required");
   }
 
-  if (expense.expense_id !== localStorage.getItem("user_id")) {
+  if (expense.user_id !== localStorage.getItem("user_id")) {
     throw new Error("Unauthorized access");
   }
   try {

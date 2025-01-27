@@ -97,7 +97,7 @@ const Dashboard = () => {
     }
   };
   return (
-    <div className="flex bg-gray-800 flex-col h-screen">
+    <div className="flex bg-gray-800 flex-col h-full">
       <div className="flex w-full p-4 gap-2 flex-col md:flex-row">
         {/* Card 1 */}
         <div className="bg-blue-800/25 text-white text-lg font-semibold rounded-2xl w-full h-[150px] flex justify-between items-center p-4 shadow-lg">

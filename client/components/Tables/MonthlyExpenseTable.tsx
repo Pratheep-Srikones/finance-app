@@ -49,9 +49,7 @@ const MonthlyExpenseTable = ({ expenses }: { expenses: Expense[] }) => {
           console.log(res);
         })
         .catch((err) => {
-          notifyError(
-            "Error editing: " + err.response.data.error.error.message
-          );
+          notifyError("Error editing: " + err);
         });
     }
     if (action === "Delete") {

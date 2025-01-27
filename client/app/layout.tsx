@@ -14,7 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Expensio",
+<<<<<<< HEAD
   description: "Simplify the finance management process",
+=======
+  description: "Simplify the Expense management process",
+>>>>>>> master
 };
 
 export default function RootLayout({
