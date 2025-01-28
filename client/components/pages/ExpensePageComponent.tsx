@@ -1,5 +1,5 @@
 "use client";
-import SavingsCard from "@/components/cards/SavingsCard";
+import ExpenseCard from "@/components/cards/ExpenseCard";
 import { ExpensePieChart } from "@/components/Charts/ExpensePieChart";
 import MonthlyExpenseTable from "@/components/Tables/MonthlyExpenseTable";
 import { month, months, user_id, year } from "@/data/data";
@@ -10,6 +10,7 @@ import {
 import { Expense } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AverageCard from "../cards/AverageCard";
 
 const ExpensePage = () => {
   const router = useRouter();
@@ -78,9 +79,11 @@ const ExpensePage = () => {
           <ExpensePieChart month={monthStr} year={yearStr} data={typeTotals} />
         </div>
         <div className="hover:shadow-lg transform hover:scale-105 transition-transform duration-30">
-          <SavingsCard data={typeTotals} />
+          <ExpenseCard data={typeTotals} />
         </div>
-        <div>something more</div>
+        <div className="hover:shadow-lg transform hover:scale-105 transition-transform duration-30">
+          <AverageCard data={typeTotals} />
+        </div>
       </div>
 
       <div className="m-6 w-auto">

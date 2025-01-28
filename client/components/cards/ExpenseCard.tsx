@@ -1,6 +1,6 @@
 import { sumOf } from "@/utils/calculate";
 
-const SavingsCard = ({ data }: { data: { type: string; total: number }[] }) => {
+const ExpenseCard = ({ data }: { data: { type: string; total: number }[] }) => {
   return (
     <div className="bg-gray-950/60 mt-2 p-4 rounded-lg shadow-lg border border-white h-full w-[250px] md:w-[300px] max-w-[90%] md:max-w-[500px] mx-auto">
       <div className="flex flex-col gap-4 text-white">
@@ -28,4 +28,4 @@ const SavingsCard = ({ data }: { data: { type: string; total: number }[] }) => {
   );
 };
 
-export default SavingsCard;
+export default ExpenseCard;
